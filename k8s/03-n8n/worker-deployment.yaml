@@ -1,0 +1,129 @@
+# n8n Worker Deployment
+# Handles background workflow execution
+#
+# NOTE: Environment variables are duplicated between this deployment and main-deployment.yaml
+# This is intentional to keep manifests self-contained and avoid templating complexity.
+# Both deployments need the same database and queue configuration to function properly.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: n8n-worker
+  namespace: n8n
+spec:
+  # replicas: 3  # REMOVED - managed by HPA (minReplicas: 2, maxReplicas: 9)
+  selector:
+    matchLabels:
+      app: n8n-worker
+  template:
+    metadata:
+      labels:
+        app: n8n-worker
+    spec:
+      serviceAccountName: n8n-secrets-sa
+      # Spread pods evenly across availability zones (auto-scaling friendly)
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: n8n-worker
+
+      # Optional: Also spread across nodes for additional resilience
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            app: n8n-worker
+
+      containers:
+      - name: n8n-worker
+        image: n8nio/n8n:latest
+        command:
+        - n8n
+        - worker
+        volumeMounts:
+        - name: aurora-secrets
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+        env:
+        # Load from ConfigMap
+        - name: DB_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: DB_TYPE
+        - name: DB_POSTGRESDB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: n8n-aurora-secrets
+              key: DB_POSTGRESDB_HOST
+        - name: DB_POSTGRESDB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: n8n-aurora-secrets
+              key: DB_POSTGRESDB_PORT
+        - name: DB_POSTGRESDB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: n8n-aurora-secrets
+              key: DB_POSTGRESDB_DATABASE
+        - name: DB_POSTGRESDB_USER
+          valueFrom:
+            secretKeyRef:
+              name: n8n-aurora-secrets
+              key: DB_POSTGRESDB_USER
+        - name: QUEUE_BULL_REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: QUEUE_BULL_REDIS_HOST
+        - name: QUEUE_BULL_REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: QUEUE_BULL_REDIS_PORT
+        - name: EXECUTIONS_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: EXECUTIONS_MODE
+        - name: QUEUE_WORKER_TIMEOUT
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: QUEUE_WORKER_TIMEOUT
+        - name: N8N_DEFAULT_BINARY_DATA_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: N8N_DEFAULT_BINARY_DATA_MODE
+
+        # Load from Secrets
+        - name: DB_POSTGRESDB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: n8n-aurora-secrets
+              key: DB_POSTGRESDB_PASSWORD
+        - name: N8N_ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: n8n-secrets
+              key: N8N_ENCRYPTION_KEY
+
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+
+      volumes:
+      - name: aurora-secrets
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: n8n-aurora-secrets-provider
