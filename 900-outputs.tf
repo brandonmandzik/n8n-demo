@@ -58,6 +58,7 @@ output "aurora_database_name" {
 output "aurora_master_username" {
   description = "Aurora master username"
   value       = aws_rds_cluster.aurora.master_username
+  sensitive   = true
 }
 
 output "aurora_secret_arn" {
@@ -68,7 +69,7 @@ output "aurora_secret_arn" {
 output "aurora_connection_string" {
   description = "PostgreSQL connection string for Kubernetes ConfigMap"
   value       = "postgresql://${aws_rds_cluster.aurora.master_username}@${aws_rds_cluster.aurora.endpoint}:${aws_rds_cluster.aurora.port}/${aws_rds_cluster.aurora.database_name}"
-  sensitive   = false
+  sensitive   = true
 }
 
 # =============================================================================

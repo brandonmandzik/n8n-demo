@@ -10,6 +10,9 @@ resource "aws_eks_cluster" "main" {
     endpoint_public_access  = true
   }
 
+  # Enable control plane logging for security and compliance
+  enabled_cluster_log_types = ["api", "audit", "authenticator"]
+
   # Auto Mode configuration
   compute_config {
     enabled       = true

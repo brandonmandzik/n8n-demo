@@ -20,13 +20,13 @@ resource "aws_security_group_rule" "aurora_ingress_from_eks" {
   description              = "Allow PostgreSQL access from EKS cluster"
 }
 
-# Allow egress for software updates and AWS API calls
+# Allow egress within VPC only (Aurora doesn't need internet access)
 resource "aws_security_group_rule" "aurora_egress" {
   type              = "egress"
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
-  cidr_blocks       = ["0.0.0.0/0"]
+  cidr_blocks       = [var.vpc_cidr]
   security_group_id = aws_security_group.aurora.id
-  description       = "Allow all outbound traffic"
+  description       = "Allow outbound traffic within VPC only"
 }

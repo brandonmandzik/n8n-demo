@@ -6,9 +6,18 @@ module "vpc" {
   name = "${local.cluster_name}-vpc"
   cidr = var.vpc_cidr
 
-  azs             = ["${var.region}a", "${var.region}b", "${var.region}c"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  azs = ["${var.region}a", "${var.region}b", "${var.region}c"]
+  # Dynamic subnet calculation from VPC CIDR
+  private_subnets = [
+    cidrsubnet(var.vpc_cidr, 8, 1),   # 10.0.1.0/24
+    cidrsubnet(var.vpc_cidr, 8, 2),   # 10.0.2.0/24
+    cidrsubnet(var.vpc_cidr, 8, 3),   # 10.0.3.0/24
+  ]
+  public_subnets = [
+    cidrsubnet(var.vpc_cidr, 8, 101), # 10.0.101.0/24
+    cidrsubnet(var.vpc_cidr, 8, 102), # 10.0.102.0/24
+    cidrsubnet(var.vpc_cidr, 8, 103), # 10.0.103.0/24
+  ]
 
   enable_nat_gateway = true
   single_nat_gateway = true # MVP: Cost savings
