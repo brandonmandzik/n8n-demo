@@ -19,8 +19,9 @@ module "vpc" {
     cidrsubnet(var.vpc_cidr, 8, 103), # 10.0.103.0/24
   ]
 
-  enable_nat_gateway = true
-  single_nat_gateway = true # MVP: Cost savings
+  enable_nat_gateway     = true
+  single_nat_gateway     = false
+  one_nat_gateway_per_az = true # HA: One NAT Gateway per AZ
 
   # EKS tags for subnet discovery
   public_subnet_tags = {

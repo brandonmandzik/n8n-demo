@@ -1,0 +1,263 @@
+<mxfile host="app.diagrams.net" modified="2026-02-05T00:00:00.000Z" agent="Claude Code" version="24.0.0" type="device">
+  <diagram name="AWS EKS n8n Architecture" id="aws-eks-architecture">
+    <mxGraphModel dx="2400" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Internet Cloud -->
+        <mxCell id="internet" value="Internet" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="850" y="40" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- AWS Region Container -->
+        <mxCell id="region" value="AWS Region: eu-central-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;verticalAlign=top;fontSize=14;fontStyle=1;dashed=1;dashPattern=5 5;align=center;" vertex="1" parent="1">
+          <mxGeometry x="80" y="160" width="1800" height="1180" as="geometry" />
+        </mxCell>
+
+        <!-- VPC Container -->
+        <mxCell id="vpc" value="VPC: 10.0.0.0/16" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=top;fontSize=13;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="120" y="220" width="1720" height="1060" as="geometry" />
+        </mxCell>
+
+        <!-- Internet Gateway -->
+        <mxCell id="igw" value="Internet&#xa;Gateway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="900" y="260" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Availability Zone 1 (eu-central-1a) -->
+        <mxCell id="az1" value="Availability Zone: eu-central-1a" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;verticalAlign=top;fontSize=11;fontStyle=1;dashed=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="160" y="360" width="500" height="880" as="geometry" />
+        </mxCell>
+
+        <!-- Public Subnet AZ1 -->
+        <mxCell id="public-subnet-1" value="Public Subnet&#xa;10.0.101.0/24" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="180" y="400" width="460" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- NAT Gateway -->
+        <mxCell id="nat" value="NAT Gateway" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="220" y="450" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Network Load Balancer -->
+        <mxCell id="nlb" value="Network Load&#xa;Balancer (NLB)&#xa;internet-facing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6c8ebf;strokeColor=#23445d;fontSize=10;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="480" y="450" width="120" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Private Subnet AZ1 -->
+        <mxCell id="private-subnet-1" value="Private Subnet&#xa;10.0.1.0/24" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=top;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="180" y="620" width="460" height="580" as="geometry" />
+        </mxCell>
+
+        <!-- EKS Node Group AZ1 -->
+        <mxCell id="eks-nodes-1" value="EKS Worker Nodes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff4e6;strokeColor=#d79b00;verticalAlign=top;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="200" y="660" width="200" height="320" as="geometry" />
+        </mxCell>
+
+        <!-- n8n main pod -->
+        <mxCell id="n8n-main-1" value="n8n-main&#xa;pod&#xa;:5678" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="220" y="700" width="70" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- n8n worker pods -->
+        <mxCell id="n8n-worker-1" value="n8n-worker&#xa;pods (2-9)&#xa;HPA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="310" y="700" width="70" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Redis -->
+        <mxCell id="redis-1" value="Redis&#xa;StatefulSet&#xa;:6379" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="220" y="780" width="70" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Redis PV -->
+        <mxCell id="redis-pv-1" value="EBS gp3&#xa;5Gi&#xa;Encrypted" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=8;" vertex="1" parent="1">
+          <mxGeometry x="220" y="850" width="70" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- NGINX Ingress -->
+        <mxCell id="nginx-1" value="NGINX&#xa;Ingress&#xa;Controller" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6c8ebf;strokeColor=#23445d;fontSize=9;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="310" y="780" width="70" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Aurora Instance 1 -->
+        <mxCell id="aurora-1" value="Aurora PG&#xa;Instance 1&#xa;Serverless v2&#xa;0.5-2 ACU" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="450" y="1050" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Availability Zone 2 (eu-central-1b) -->
+        <mxCell id="az2" value="Availability Zone: eu-central-1b" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;verticalAlign=top;fontSize=11;fontStyle=1;dashed=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="700" y="360" width="500" height="880" as="geometry" />
+        </mxCell>
+
+        <!-- Public Subnet AZ2 -->
+        <mxCell id="public-subnet-2" value="Public Subnet&#xa;10.0.102.0/24" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="720" y="400" width="460" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- Private Subnet AZ2 -->
+        <mxCell id="private-subnet-2" value="Private Subnet&#xa;10.0.2.0/24" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=top;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="720" y="620" width="460" height="580" as="geometry" />
+        </mxCell>
+
+        <!-- EKS Node Group AZ2 -->
+        <mxCell id="eks-nodes-2" value="EKS Worker Nodes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff4e6;strokeColor=#d79b00;verticalAlign=top;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="740" y="660" width="200" height="320" as="geometry" />
+        </mxCell>
+
+        <!-- n8n worker pods AZ2 -->
+        <mxCell id="n8n-worker-2" value="n8n-worker&#xa;pods" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="760" y="700" width="70" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- NGINX Ingress AZ2 -->
+        <mxCell id="nginx-2" value="NGINX&#xa;Ingress" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6c8ebf;strokeColor=#23445d;fontSize=9;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="850" y="700" width="70" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Aurora Instance 2 -->
+        <mxCell id="aurora-2" value="Aurora PG&#xa;Instance 2&#xa;Serverless v2&#xa;0.5-2 ACU" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="990" y="1050" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Availability Zone 3 (eu-central-1c) -->
+        <mxCell id="az3" value="Availability Zone: eu-central-1c" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;verticalAlign=top;fontSize=11;fontStyle=1;dashed=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="360" width="500" height="880" as="geometry" />
+        </mxCell>
+
+        <!-- Public Subnet AZ3 -->
+        <mxCell id="public-subnet-3" value="Public Subnet&#xa;10.0.103.0/24" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=top;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="400" width="460" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- Private Subnet AZ3 -->
+        <mxCell id="private-subnet-3" value="Private Subnet&#xa;10.0.3.0/24" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=top;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="620" width="460" height="580" as="geometry" />
+        </mxCell>
+
+        <!-- EKS Node Group AZ3 -->
+        <mxCell id="eks-nodes-3" value="EKS Worker Nodes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff4e6;strokeColor=#d79b00;verticalAlign=top;fontSize=10;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="660" width="200" height="320" as="geometry" />
+        </mxCell>
+
+        <!-- n8n worker pods AZ3 -->
+        <mxCell id="n8n-worker-3" value="n8n-worker&#xa;pods" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="700" width="70" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- NGINX Ingress AZ3 -->
+        <mxCell id="nginx-3" value="NGINX&#xa;Ingress" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6c8ebf;strokeColor=#23445d;fontSize=9;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="700" width="70" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- EKS Control Plane -->
+        <mxCell id="eks-control-plane" value="EKS Control Plane&#xa;Cluster: n8n-cluster&#xa;Version: 1.31 (Auto Mode)&#xa;API: Public + Private&#xa;Logging: api, audit, authenticator" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;fontStyle=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1520" y="220" width="280" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Aurora DB Cluster Info -->
+        <mxCell id="aurora-cluster" value="Aurora PostgreSQL Cluster&#xa;Engine: PostgreSQL 15.8&#xa;Database: n8n&#xa;Port: 5432&#xa;HA: Multi-AZ (2 instances)&#xa;Security: EKS-only access" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;fontStyle=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="420" y="1180" width="240" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- AWS Secrets Manager -->
+        <mxCell id="secrets-manager" value="AWS Secrets Manager&#xa;&#xa;• Aurora credentials&#xa;• n8n app secrets&#xa;  (encryption key, auth)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1560" y="410" width="200" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- IAM Roles -->
+        <mxCell id="iam-roles" value="IAM Roles (IRSA)&#xa;&#xa;• EKS Cluster Role&#xa;• EKS Node Role&#xa;• EBS CSI Driver&#xa;• Secrets CSI Driver&#xa;&#xa;ServiceAccount:&#xa;n8n-secrets-sa" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;fontStyle=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1560" y="560" width="200" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- Storage Info -->
+        <mxCell id="storage-info" value="EBS CSI Driver&#xa;&#xa;StorageClass:&#xa;ebs-csi-gp3&#xa;(default, encrypted)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;fontStyle=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1560" y="750" width="140" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Namespaces Info -->
+        <mxCell id="namespaces-info" value="Kubernetes Namespaces&#xa;&#xa;n8n:&#xa;• n8n-main (1 pod)&#xa;• n8n-worker (HPA 2-9)&#xa;• Redis StatefulSet&#xa;&#xa;ingress-nginx:&#xa;• NGINX Controller" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;fontStyle=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1560" y="890" width="180" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- Security Groups -->
+        <mxCell id="security-groups" value="Security Groups&#xa;&#xa;Aurora SG:&#xa;• Ingress: Port 5432&#xa;  from EKS cluster&#xa;• Egress: VPC-only" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;fontStyle=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="720" y="1180" width="150" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Traffic Flow Arrows -->
+
+        <!-- Internet to IGW -->
+        <mxCell id="arrow-internet-igw" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#6c8ebf;endArrow=classic;endFill=1;" edge="1" parent="1" source="internet" target="igw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- IGW to NLB -->
+        <mxCell id="arrow-igw-nlb" value="HTTP/HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#6c8ebf;endArrow=classic;endFill=1;fontSize=9;" edge="1" parent="1" source="igw" target="nlb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- NLB to NGINX -->
+        <mxCell id="arrow-nlb-nginx1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#6c8ebf;endArrow=classic;endFill=1;" edge="1" parent="1" source="nlb" target="nginx-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- NGINX to n8n-main -->
+        <mxCell id="arrow-nginx-n8n" value=":5678" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#82b366;endArrow=classic;endFill=1;fontSize=9;" edge="1" parent="1" source="nginx-1" target="n8n-main-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- n8n-main to Redis -->
+        <mxCell id="arrow-n8n-redis" value="queue" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#d79b00;endArrow=classic;endFill=1;fontSize=9;" edge="1" parent="1" source="n8n-main-1" target="redis-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Redis to n8n-worker -->
+        <mxCell id="arrow-redis-worker" value="jobs" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#d79b00;endArrow=classic;endFill=1;fontSize=9;" edge="1" parent="1" source="redis-1" target="n8n-worker-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Redis to PV -->
+        <mxCell id="arrow-redis-pv" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#b85450;endArrow=classic;endFill=1;dashed=1;" edge="1" parent="1" source="redis-1" target="redis-pv-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- n8n-worker to Aurora -->
+        <mxCell id="arrow-worker-aurora" value=":5432" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#9673a6;endArrow=classic;endFill=1;fontSize=9;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="n8n-worker-1" target="aurora-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- n8n-main to Aurora -->
+        <mxCell id="arrow-main-aurora" value="DB" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#9673a6;endArrow=classic;endFill=1;fontSize=9;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="n8n-main-1" target="aurora-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Nodes to NAT Gateway -->
+        <mxCell id="arrow-nodes-nat" value="egress" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;endArrow=classic;endFill=1;fontSize=9;dashed=1;" edge="1" parent="1" source="eks-nodes-1" target="nat">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Secrets Manager to pods -->
+        <mxCell id="arrow-secrets-pods" value="CSI + IRSA" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#d6b656;endArrow=classic;endFill=1;fontSize=9;dashed=1;dashPattern=5 5;" edge="1" parent="1" source="secrets-manager" target="n8n-main-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- EKS Control Plane to Nodes -->
+        <mxCell id="arrow-control-nodes" value="Manage" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#d79b00;endArrow=classic;endFill=1;fontSize=9;dashed=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="eks-control-plane" target="eks-nodes-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend" value="Traffic Flow Legend:&#xa;━━  HTTP/External&#xa;━━  Application&#xa;━━  Database&#xa;- - -  Control/Config" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=9;align=left;verticalAlign=top;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="120" y="1300" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Add-ons Info -->
+        <mxCell id="addons-info" value="EKS Add-ons:&#xa;vpc-cni, ebs-csi-driver,&#xa;coredns, kube-proxy,&#xa;metrics-server,&#xa;secrets-store-csi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1520" y="360" width="140" height="80" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
