@@ -1,15 +1,11 @@
 # =============================================================================
-# EKS Cluster Outputs
+# Lean Outputs - Focused on Access & Configuration
 # =============================================================================
 
+# Basic cluster info
 output "cluster_name" {
   description = "EKS cluster name"
   value       = aws_eks_cluster.main.name
-}
-
-output "cluster_endpoint" {
-  description = "EKS cluster endpoint"
-  value       = aws_eks_cluster.main.endpoint
 }
 
 output "region" {
@@ -17,66 +13,38 @@ output "region" {
   value       = var.region
 }
 
+# Configuration commands
 output "configure_kubectl" {
-  description = "Command to configure kubectl"
+  description = "Command to configure kubectl access"
   value       = "aws eks update-kubeconfig --name ${aws_eks_cluster.main.name} --region ${var.region}"
 }
 
-# =============================================================================
-# VPC Outputs
-# =============================================================================
-
-output "vpc_id" {
-  description = "VPC ID"
-  value       = module.vpc.vpc_id
+output "get_n8n_url" {
+  description = "Command to get n8n application URL"
+  value       = "kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'"
 }
 
-# =============================================================================
-# Aurora Database Outputs
-# =============================================================================
+# Quick start guide
+output "quick_start" {
+  description = "Quick start guide to access n8n"
+  value       = <<-EOT
+    ╔══════════════════════════════════════════════════════════════╗
+    ║  n8n Deployment Complete - Quick Start Guide                 ║
+    ╚══════════════════════════════════════════════════════════════╝
 
-output "aurora_cluster_endpoint" {
-  description = "Aurora cluster writer endpoint"
-  value       = aws_rds_cluster.aurora.endpoint
-}
+    1. Configure kubectl:
+       ${join(" ", [
+         "aws eks update-kubeconfig",
+         "--name ${aws_eks_cluster.main.name}",
+         "--region ${var.region}"
+       ])}
 
-output "aurora_cluster_reader_endpoint" {
-  description = "Aurora cluster reader endpoint"
-  value       = aws_rds_cluster.aurora.reader_endpoint
-}
+    2. Get n8n application URL (wait ~2 min if just deployed):
+       kubectl get svc -n ingress-nginx ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
 
-output "aurora_cluster_port" {
-  description = "Aurora cluster port"
-  value       = aws_rds_cluster.aurora.port
-}
+    3. Access n8n:
+       Visit: http://<url-from-step-2>
 
-output "aurora_database_name" {
-  description = "Aurora database name"
-  value       = aws_rds_cluster.aurora.database_name
-}
-
-output "aurora_master_username" {
-  description = "Aurora master username"
-  value       = aws_rds_cluster.aurora.master_username
-  sensitive   = true
-}
-
-output "aurora_secret_arn" {
-  description = "ARN of Secrets Manager secret containing Aurora credentials"
-  value       = aws_secretsmanager_secret.aurora_credentials.arn
-}
-
-output "aurora_connection_string" {
-  description = "PostgreSQL connection string for Kubernetes ConfigMap"
-  value       = "postgresql://${aws_rds_cluster.aurora.master_username}@${aws_rds_cluster.aurora.endpoint}:${aws_rds_cluster.aurora.port}/${aws_rds_cluster.aurora.database_name}"
-  sensitive   = true
-}
-
-# =============================================================================
-# IAM Outputs
-# =============================================================================
-
-output "secrets_csi_role_arn" {
-  description = "ARN of IAM role for Secrets Store CSI driver"
-  value       = aws_iam_role.secrets_csi.arn
+    Note: Database credentials are automatically injected via AWS Secrets Manager
+  EOT
 }
