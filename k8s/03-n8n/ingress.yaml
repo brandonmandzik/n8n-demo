@@ -8,10 +8,9 @@ metadata:
     # nginx.ingress.kubernetes.io/ssl-redirect: "true"
     # cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
-  ingressClassName: nginx  # Change based on your ingress controller
+  ingressClassName: nginx
   rules:
-  - host: n8n.example.com  # Change to your domain
-    http:
+  - http:  # No host restriction - accepts all traffic (add host for custom domain later)
       paths:
       - path: /
         pathType: Prefix
@@ -20,6 +19,17 @@ spec:
             name: n8n-main
             port:
               number: 5678
+  # To add custom domain later, uncomment and configure:
+  # - host: your-domain.com
+  #   http:
+  #     paths:
+  #     - path: /
+  #       pathType: Prefix
+  #       backend:
+  #         service:
+  #           name: n8n-main
+  #           port:
+  #             number: 5678
   # Uncomment for TLS
   # tls:
   # - hosts:
