@@ -87,6 +87,11 @@ spec:
             configMapKeyRef:
               name: n8n-config
               key: N8N_DEFAULT_BINARY_DATA_MODE
+        - name: N8N_SECURE_COOKIE
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: N8N_SECURE_COOKIE
 
         # Load from Secrets
         - name: DB_POSTGRESDB_PASSWORD
