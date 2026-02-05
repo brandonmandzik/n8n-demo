@@ -40,10 +40,10 @@ resource "aws_iam_role_policy_attachment" "ebs_csi" {
   role       = aws_iam_role.ebs_csi.name
 }
 
-# IAM policy for Secrets Store CSI driver - Aurora secret access
+# IAM policy for Secrets Store CSI driver - access to all n8n secrets
 resource "aws_iam_policy" "secrets_csi_aurora" {
-  name_prefix = "${local.cluster_name}-secrets-csi-aurora-"
-  description = "Policy for Secrets Store CSI driver to access Aurora credentials"
+  name_prefix = "${local.cluster_name}-secrets-csi-"
+  description = "Policy for Secrets Store CSI driver to access n8n secrets"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -53,7 +53,10 @@ resource "aws_iam_policy" "secrets_csi_aurora" {
         "secretsmanager:GetSecretValue",
         "secretsmanager:DescribeSecret"
       ]
-      Resource = aws_secretsmanager_secret.aurora_credentials.arn
+      Resource = [
+        aws_secretsmanager_secret.aurora_credentials.arn,
+        aws_secretsmanager_secret.n8n_app_secrets.arn
+      ]
     }]
   })
 

@@ -6,7 +6,8 @@ metadata:
 data:
   # Database configuration
   DB_TYPE: "postgresdb"
-  # Aurora connection details now managed by CSI driver (n8n-aurora-secrets)
+  # Aurora connection details managed by AWS Secrets Manager CSI driver (n8n-aurora-secrets)
+  # n8n application secrets managed by AWS Secrets Manager CSI driver (n8n-app-secrets)
 
   # Redis configuration
   QUEUE_BULL_REDIS_HOST: "redis.n8n.svc.cluster.local"

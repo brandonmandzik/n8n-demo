@@ -28,7 +28,10 @@ spec:
           name: http
         volumeMounts:
         - name: aurora-secrets
-          mountPath: "/mnt/secrets-store"
+          mountPath: "/mnt/secrets-store/aurora"
+          readOnly: true
+        - name: app-secrets
+          mountPath: "/mnt/secrets-store/app"
           readOnly: true
         env:
         # Load from ConfigMap
@@ -102,20 +105,18 @@ spec:
         - name: N8N_ENCRYPTION_KEY
           valueFrom:
             secretKeyRef:
-              name: n8n-secrets
+              name: n8n-app-secrets
               key: N8N_ENCRYPTION_KEY
         - name: N8N_BASIC_AUTH_USER
           valueFrom:
             secretKeyRef:
-              name: n8n-secrets
+              name: n8n-app-secrets
               key: N8N_BASIC_AUTH_USER
-              optional: true
         - name: N8N_BASIC_AUTH_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: n8n-secrets
+              name: n8n-app-secrets
               key: N8N_BASIC_AUTH_PASSWORD
-              optional: true
 
         # Main instance specific
         - name: N8N_BASIC_AUTH_ACTIVE
@@ -152,3 +153,9 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: n8n-aurora-secrets-provider
+      - name: app-secrets
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: n8n-app-secrets-provider
