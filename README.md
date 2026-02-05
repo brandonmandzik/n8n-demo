@@ -24,6 +24,8 @@ Deployment of this member will take 10-20 minutes on GitHub resources.
 
 ## Architecture
 
+<img width="2042" height="1531" alt="infra drawio" src="https://github.com/user-attachments/assets/1a7eecde-3101-4402-bc33-c0fd1593960b" />
+
 [Image]
 
 ## Explore this demo
