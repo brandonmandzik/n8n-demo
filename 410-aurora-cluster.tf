@@ -1,14 +1,6 @@
 # Aurora Serverless v2 PostgreSQL Configuration
 # Drop-in replacement for in-cluster PostgreSQL StatefulSet
 
-# Check for existing snapshots to restore from (for serverless lifecycle)
-data "aws_db_cluster_snapshot" "latest" {
-  count                 = 1
-  db_cluster_identifier = local.aurora_cluster_identifier
-  most_recent           = true
-  snapshot_type         = "manual" # Final snapshots are manual type
-}
-
 # DB subnet group using existing private subnets
 resource "aws_db_subnet_group" "aurora" {
   name_prefix = "${local.aurora_cluster_identifier}-"
@@ -62,13 +54,9 @@ resource "aws_rds_cluster" "aurora" {
   preferred_backup_window      = "03:00-04:00"
   preferred_maintenance_window = "mon:04:00-mon:05:00"
 
-  # Serverless lifecycle: keep protection off, but always create final snapshot
+  # Allow easy destroy without snapshot creation
   deletion_protection = false
-  skip_final_snapshot = false
-  final_snapshot_identifier = "${local.aurora_cluster_identifier}-final-${formatdate("YYYY-MM-DD-hhmm", timestamp())}"
-
-  # Restore from latest snapshot if available (for serverless restore workflow)
-  snapshot_identifier = length(data.aws_db_cluster_snapshot.latest) > 0 ? try(data.aws_db_cluster_snapshot.latest[0].id, null) : null
+  skip_final_snapshot = true
 
   storage_encrypted = true
 
