@@ -27,11 +27,3 @@ resource "aws_iam_role_policy_attachment" "node_policy" {
   policy_arn = each.value
   role       = aws_iam_role.node.name
 }
-
-# Instance profile for node role (required for Auto Mode)
-resource "aws_iam_instance_profile" "node" {
-  name = "${local.cluster_name}-node-instance-profile"
-  role = aws_iam_role.node.name
-
-  tags = local.tags
-}
