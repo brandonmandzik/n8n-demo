@@ -1,14 +1,6 @@
 # Aurora Serverless v2 PostgreSQL Configuration
 # Drop-in replacement for in-cluster PostgreSQL StatefulSet
 
-# CloudWatch Log Group for Aurora PostgreSQL logs
-resource "aws_cloudwatch_log_group" "aurora" {
-  name              = "/aws/rds/cluster/${local.aurora_cluster_identifier}/postgresql"
-  retention_in_days = 7
-
-  tags = local.tags
-}
-
 # DB subnet group using existing private subnets
 resource "aws_db_subnet_group" "aurora" {
   name_prefix = "${local.aurora_cluster_identifier}-"
@@ -76,10 +68,6 @@ resource "aws_rds_cluster" "aurora" {
   tags = merge(local.tags, {
     Name = local.aurora_cluster_identifier
   })
-
-  depends_on = [
-    aws_cloudwatch_log_group.aurora
-  ]
 }
 
 # Aurora cluster instances (Multi-AZ)

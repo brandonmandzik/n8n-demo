@@ -1,11 +1,3 @@
-# CloudWatch Log Group for EKS control plane logs
-resource "aws_cloudwatch_log_group" "eks_cluster" {
-  name              = "/aws/eks/${local.cluster_name}/cluster"
-  retention_in_days = 7
-
-  tags = local.tags
-}
-
 # EKS Cluster with Auto Mode
 resource "aws_eks_cluster" "main" {
   name     = local.cluster_name
@@ -54,7 +46,6 @@ resource "aws_eks_cluster" "main" {
   tags = local.tags
 
   depends_on = [
-    aws_iam_role_policy_attachment.cluster_policy,
-    aws_cloudwatch_log_group.eks_cluster
+    aws_iam_role_policy_attachment.cluster_policy
   ]
 }
