@@ -3,7 +3,8 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "~> 5.0"
 
-  name = "${local.cluster_name}-vpc"
+  # name = "${local.cluster_name}-vpc"
+  name = local._name_tag
   cidr = var.vpc_cidr
 
   azs = ["${var.region}a", "${var.region}b", "${var.region}c"]
@@ -30,6 +31,4 @@ module "vpc" {
   private_subnet_tags = {
     "kubernetes.io/role/internal-elb" = "1"
   }
-
-  tags = local.tags
 }
