@@ -1,6 +1,7 @@
 # IAM role for EKS cluster
 resource "aws_iam_role" "cluster" {
-  name = "${local.cluster_name}-cluster-role"
+  # name = "${local.cluster_name}-cluster-role"
+  name = local._name_tag
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

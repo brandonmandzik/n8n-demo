@@ -1,14 +1,15 @@
 terraform {
   required_version = ">= 1.6"
 
+# TODO: provider mal weglassen und gucken
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      # version = "~> 5.0"
     }
     kubectl = {
       source  = "gavinbunney/kubectl"
-      version = "~> 1.14"
+      # version = "~> 1.14"
     }
   }
 }
@@ -37,3 +38,5 @@ provider "kubectl" {
     ]
   }
 }
+
+

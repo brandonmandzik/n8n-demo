@@ -26,3 +26,4 @@ data:
 
   # Binary data configuration
   N8N_DEFAULT_BINARY_DATA_MODE: "database"
+

@@ -1,6 +1,7 @@
 # IAM role for nodes (auto mode)
 resource "aws_iam_role" "node" {
-  name = "${local.cluster_name}-node-role"
+  # name = "${local.cluster_name}-node-role"
+  name = local._name_tag
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

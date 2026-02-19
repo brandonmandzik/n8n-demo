@@ -3,18 +3,21 @@
 
 # DB subnet group using existing private subnets
 resource "aws_db_subnet_group" "aurora" {
+  # TODO: name
   name_prefix = "${local.aurora_cluster_identifier}-"
   description = "Subnet group for Aurora cluster in private subnets"
   subnet_ids  = local.aurora_subnet_ids
 
   tags = merge(local.tags, {
-    Name = "${local.aurora_cluster_identifier}-subnet-group"
+    # Name = "${local.aurora_cluster_identifier}-subnet-group"
+    Name = local._name_tag
   })
 }
 
 # RDS cluster parameter group for PostgreSQL 15
 resource "aws_rds_cluster_parameter_group" "aurora" {
   name_prefix = "${local.aurora_cluster_identifier}-"
+  # TODO: add to var'
   family      = "aurora-postgresql15"
   description = "Custom parameter group for Aurora PostgreSQL 15"
 
@@ -34,6 +37,7 @@ resource "aws_rds_cluster_parameter_group" "aurora" {
 # Aurora Serverless v2 cluster
 resource "aws_rds_cluster" "aurora" {
   cluster_identifier = local.aurora_cluster_identifier
+  # TODO: add to var'
   engine             = "aurora-postgresql"
   engine_mode        = "provisioned"
   engine_version     = "15.8"

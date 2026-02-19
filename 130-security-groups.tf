@@ -1,11 +1,13 @@
 # Security group for Aurora cluster
 resource "aws_security_group" "aurora" {
+  # TODO: name
   name_prefix = "${local.aurora_cluster_identifier}-"
   description = "Security group for Aurora PostgreSQL cluster"
   vpc_id      = module.vpc.vpc_id
 
   tags = merge(local.tags, {
-    Name = "${local.aurora_cluster_identifier}-sg"
+    # Name = "${local.aurora_cluster_identifier}-sg"
+    Name = local._name_tag
   })
 }
 

@@ -3,6 +3,7 @@
 # Core infrastructure locals
 locals {
   cluster_name = var.cluster_name
+  # TODO: zum rauschmeißen
   tags = {
     Environment = var.environment
     ManagedBy   = "terraform"
